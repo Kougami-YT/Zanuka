@@ -156,7 +156,7 @@ namespace WarframeStat_Class
         public string eta { get; set; }
         public int discount { get; set; }
     }
-
+    
     public class Resp_VoidTrader
     {
         public string id { get; set; }
@@ -166,9 +166,15 @@ namespace WarframeStat_Class
         public bool active { get; set; }
         public string character { get; set; }
         public string location { get; set; }
-        public object[] inventory { get; set; }
+        public Inventory[] inventory { get; set; }
         public string psId { get; set; }
         public string endString { get; set; }
+    }
+    public class Inventory
+    {
+        public string item { get; set; }
+        public int ducats { get; set; }
+        public int credits { get; set; }
     }
 
     public class Resp_Nightwave
@@ -205,7 +211,7 @@ namespace WarframeStat_Class
     }
 
     public class Resp_Translate
-{
+    {
         public string type { get; set; }
         public int errorCode { get; set; }
         public int elapsedTime { get; set; }
@@ -219,6 +225,6 @@ namespace WarframeStat_Class
 
 
 
-    
+
 
 }

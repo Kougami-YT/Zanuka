@@ -194,7 +194,13 @@ namespace me.cqp.yt.zanuka.Code
             }
             else
             {
-                result.text = Info.character + " 已到达 " + Dic.EnToZh(Sub.Mid(Info.location, "(", ")"), Dic.dict) + " 中继站";
+                result.text = Info.character + " 已到达 " + Dic.EnToZh(Sub.Mid(Info.location, "(", ")"), Dic.dict) + " 中继站\n——————————";
+                for (int i = 0; i < Info.inventory.Length; i++)
+                {
+                    result.text += "\n—" + Dic.EnToZh(Info.inventory[i].item, Dic.dict) + " [" + Info.inventory[i].ducats + " 杜卡德] [" + Info.inventory[i].credits + " 现金]";
+                }
+                result.text += "\n——————————";
+                result.text += "\n时间剩余：" + TimeHandle(Info.expiry.AddHours(8) - DateTime.Now);
             }
             return result;
         } //奸商
