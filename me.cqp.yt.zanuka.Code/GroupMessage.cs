@@ -131,19 +131,15 @@ namespace me.cqp.yt.zanuka.Code
             e.Handler = true;
         }
 
-
-
-
-        
         static string Menu()
         {
-            string result = "ZANUKA船新版本2.0内测版功能如下：\n";
-            foreach (KeyValuePair<string, Function.FuncG> i in instruct)
-            {
-                result += "|" + i.Key;
-            }
-            result += "|\n";
-            result += "......待添加";
+            string result = "ZANUKA船新版本2.1内测版功能如下：\n";
+            result += "信息类：[平原时间] [地球时间] [山谷时间]\n[仲裁] [突击] [警报] [入侵] [裂隙] [奸商] [电波] [特价]\n";
+            result += "查价类：[WM 物品(,等级)] [RM 武器]\n";
+            result += "其他：[抽奖] [更新数据] [添加监控 关键词] [删除监控 关键词]\n";
+            result += "私聊功能：[查询 关键词] [遗物 关键词/遗物] [翻译 内容]\n当前监控关键词：";
+            string keywords = Config.Get("monitor.ini", "all", "keywords", "");
+            result += keywords == "" ? "无" : keywords;
             return result;
         } //菜单文本
         static readonly Dictionary<string, Function.FuncG> instruct = new Dictionary<string, Function.FuncG>() //指令字典 无参数
@@ -153,18 +149,13 @@ namespace me.cqp.yt.zanuka.Code
             { "山谷时间" , new Function.FuncG(new Function().VallisCycle)},
             { "仲裁" , new Function.FuncG(new Function().Arbitration)},
             { "突击" , new Function.FuncG(new Function().Sortie)},
+            { "警报" , new Function.FuncG(new Function().Alerts)},
             { "入侵" , new Function.FuncG(new Function().Invasions)},
             { "裂隙" , new Function.FuncG(new Function().Fissures)},
             { "奸商" , new Function.FuncG(new Function().VoidTrader)},
             { "电波" , new Function.FuncG(new Function().Nightwave)},
-
-            { "活动" , new Function.FuncG(new Function().Events)},
-            { "警报" , new Function.FuncG(new Function().Alerts)},
-            { "地球赏金" , new Function.FuncG(new Function().Ostrons)},
-            { "金星赏金" , new Function.FuncG(new Function().Solaris)},
             { "特价" , new Function.FuncG(new Function().DailyDeals)},
-            { "小小黑" , new Function.FuncG(new Function().PersistentEnemies)},
-            { "舰队" , new Function.FuncG(new Function().ConstructionProgress)},
+            
             { "wm" , new Function.FuncG(new Function().WarframeMarket)},
             { "rm" , new Function.FuncG(new Function().RivenMarket)},
             { "wiki" , new Function.FuncG(new Function().Wiki)},
@@ -181,15 +172,5 @@ namespace me.cqp.yt.zanuka.Code
             { "添加监控" , new Function.FuncG(new Function().MonitorAdd)},
             { "删除监控" , new Function.FuncG(new Function().MonitorRemove)},
         };
-    }
-    public class FuncResult
-    {
-        public int type; //0正常返回文本 1权限不足
-        public string text;
-        public FuncResult(int type = 0, string text = "*nothing*")
-        {
-            this.type = type;
-            this.text = text;
-        }
     }
 }

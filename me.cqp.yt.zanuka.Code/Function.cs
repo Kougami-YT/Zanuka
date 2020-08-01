@@ -226,44 +226,13 @@ namespace me.cqp.yt.zanuka.Code
             }
             return result;
         } //电波
-
-        public FuncResult Events(CQGroupMessageEventArgs e, string param) //活动
-        {
-            FuncResult result = new FuncResult();
-            result.text = "游戏内活动如下：\n" + Net.Get("http://nymph.rbq.life:3000/wf/robot/events");
-            return result;
-        }
+        
         public FuncResult Alerts(CQGroupMessageEventArgs e, string param) //警报
         {
             FuncResult result = new FuncResult();
             result.text = "警报如下：\n" + Net.Get("http://nymph.rbq.life:3000/wf/robot/alerts");
             return result;
         }
-        public FuncResult Ostrons(CQGroupMessageEventArgs e, string param) //地球赏金
-        {
-            FuncResult result = new FuncResult();
-            result.text = "地球赏金如下：\n" + Net.Get("http://nymph.rbq.life:3000/wf/robot/Ostrons");
-            return result;
-        }
-        public FuncResult Solaris(CQGroupMessageEventArgs e, string param) //金星赏金
-        {
-            FuncResult result = new FuncResult();
-            result.text = "金星赏金如下：\n" + Net.Get("http://nymph.rbq.life:3000/wf/robot/Solaris");
-            return result;
-        }
-        public FuncResult PersistentEnemies(CQGroupMessageEventArgs e, string param) //小小黑
-        {
-            FuncResult result = new FuncResult();
-            result.text = "小小黑信息如下：\n" + Net.Get("http://nymph.rbq.life:3000/wf/robot/persistentEnemies");
-            return result;
-        }
-        public FuncResult ConstructionProgress(CQGroupMessageEventArgs e, string param) //舰队
-        {
-            FuncResult result = new FuncResult();
-            result.text = "舰队信息如下：\n" + Net.Get("http://nymph.rbq.life:3000/wf/robot/constructionProgress");
-            return result;
-        }
-
 
 
 
@@ -497,7 +466,7 @@ namespace me.cqp.yt.zanuka.Code
         public FuncResult WarframeMarket(CQGroupMessageEventArgs e, string item) //wm
         {
             FuncResult result = new FuncResult();
-            if (item == "") return new FuncResult(0, "参数不足！");
+            if (item == "") return new FuncResult(0, "格式：[WM 物品(,等级)] 等级默认为0\nPS：带等级不支持模糊查询");
             item = item.Replace("，", ",");
             if (item.Contains(",")) return new FuncResult(0, WMReserve(item));
             result.text = "WM搜索结果如下：\n";
@@ -579,7 +548,7 @@ namespace me.cqp.yt.zanuka.Code
         public FuncResult RivenMarket(CQGroupMessageEventArgs e, string item) //rm
         {
             FuncResult result = new FuncResult();
-            if (item == "") return new FuncResult(0, "参数不足！");
+            if (item == "") return new FuncResult(0, "格式：[RM 武器]");
             result.text = "RM搜索结果如下：\n";
             Resp_nymph_rm jsonText = API_nymph_rm.Get(item);
             if (jsonText == null || jsonText.word == null) return new FuncResult(0, RMReserve(item));
@@ -678,7 +647,7 @@ namespace me.cqp.yt.zanuka.Code
             {
                 if (new Regex("^[0-9]+$").IsMatch(param))
                 {
-                    result.text = "格式错误！\n[提供奖品 物品(,数量)]添加奖品\n例如:提供奖品 福马3个,2\n意为提供两个福马包作为奖品";
+                    result.text = "格式：[提供奖品 物品(,数量)] 数量默认为1\n例如:提供奖品 福马3个,2\n意为提供两个福马包作为奖品";
                 }
                 else
                 {
@@ -751,7 +720,7 @@ namespace me.cqp.yt.zanuka.Code
         public FuncResult Search(CQPrivateMessageEventArgs e, string param)
         {
             FuncResult result = new FuncResult();
-            if (param == "") return new FuncResult(0, "参数不足！\n[查询 关键词]\n多个关键词之间可用空格分割");
+            if (param == "") return new FuncResult(0, "格式：[查询 关键词]\n多个关键词之间可用空格分割");
             result.text = "——————————";
             int count = 0;
             string[] keywords = param.ToLower().Split(' ');
@@ -777,7 +746,7 @@ namespace me.cqp.yt.zanuka.Code
         public FuncResult Translate(CQPrivateMessageEventArgs e, string param)
         {
             FuncResult result = new FuncResult();
-            if (param == "") return new FuncResult(0, "参数不足！");
+            if (param == "") return new FuncResult(0, "格式：[翻译 内容]");
             Resp_Translate Info = API.JsonToClass<Resp_Translate>(@"http://fanyi.youdao.com/translate?&doctype=json&type=AUTO&i=" + param);
             if (Info == null || Info.translateResult.Length == 0)
             {
@@ -792,7 +761,7 @@ namespace me.cqp.yt.zanuka.Code
         public FuncResult Relic(CQPrivateMessageEventArgs e, string param)
         {
             FuncResult result = new FuncResult();
-            if (param == "") return new FuncResult(0, "参数不足！");
+            if (param == "") return new FuncResult(0, "格式：[遗物 关键词]\n多个关键词之间可用空格分割");
             result.text = "——————————";
             if (param.Contains("纪"))
             {
@@ -879,6 +848,16 @@ namespace me.cqp.yt.zanuka.Code
             if (time.Minutes != 0) result += time.Minutes + " 分 ";
             result += time.Seconds + " 秒";
             return result;
+        }
+    }
+    public class FuncResult
+    {
+        public int type; //0正常返回文本 1权限不足
+        public string text;
+        public FuncResult(int type = 0, string text = "*nothing*")
+        {
+            this.type = type;
+            this.text = text;
         }
     }
 }
